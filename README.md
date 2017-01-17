@@ -1,2 +1,0 @@
-# nexfi-mesh
-nexfi-mesh

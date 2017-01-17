@@ -1,0 +1,48 @@
+#!/bin/sh /etc/rc.common
+
+START=98
+STOP=20
+
+USE_PROCD=1
+
+channel=$(uci get mesh.@mesh-iface[0].channel)
+mesh_iface=$(uci get mesh.@mesh-iface[0].mesh_iface)
+wlan=$(uci get mesh.@mesh-iface[0].wlan)
+ssid=$(uci get mesh.@mesh-iface[0].ssid)
+bridge=$(uci get mesh.@mesh-iface[0].bridge)
+
+MP=/usr/bin/mp
+BRCTL=/usr/sbin/brctl
+
+
+start_service() {
+    $MP add $mesh_iface $wlan $ssid $channel
+    $BRCTL addif $bridge $mesh_iface
+}
+
+reload_service() {
+    restart
+}
+
+stop_service() {
+    $MP del $mesh_iface
+}
+
+service_running() {
+    logger -s "service_running"
+}
+
+service_triggers()
+{
+    logger -s "service_triggers"
+}
+
+restart() {
+    stop
+    sleep 1
+    start
+}
+
+shutdown() {
+    logger -s "shutdown"
+}
