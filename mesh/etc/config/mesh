@@ -49,7 +49,7 @@ config wifi-iface
     option    network   'lan'
     option    ssid      'nexfi-ap'
     option    mode      'ap'
-    option    encrytion 'psk-mixed'
+    option    encryption 'psk-mixed'
     option    key       '12345678'
 
 # wifi device 1
@@ -63,7 +63,7 @@ config wifi-iface
     option    network   'lan'
     option    ssid      'nexfi-mesh'
     option    mode      'mesh'
-    option    encrytion 'psk-mixed'
+    option    encryption 'psk-mixed'
     option    key       '0A5168DE'
 
 # lan interface
