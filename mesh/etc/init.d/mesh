@@ -10,14 +10,19 @@ mesh_iface=$(uci get mesh.@mesh-iface[0].mesh_iface)
 wlan=$(uci get mesh.@mesh-iface[0].wlan)
 ssid=$(uci get mesh.@mesh-iface[0].ssid)
 bridge=$(uci get mesh.@mesh-iface[0].bridge)
+ipaddr=$(uci get mesh.@lan-iface[0].ipaddr)
+ifname=$(uci get mesh.@lan-iface[0].ifname)
+netmask=$(uci get mesh.@lan-iface[0].netmask)
 
 MP=/usr/bin/mp
 BRCTL=/usr/sbin/brctl
+IFCONFIG=/sbin/ifconfig
 
 
 start_service() {
     $MP add $mesh_iface $wlan $ssid $channel
     $BRCTL addif $bridge $mesh_iface
+    $IFCONFIG $ifname $ipaddr netmask $netmask
 }
 
 reload_service() {
