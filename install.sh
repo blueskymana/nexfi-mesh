@@ -1,5 +1,6 @@
 #!/bin/sh
 
-cp ./mesh/* /
+cp -R ./mesh/* /
 /etc/init.d/network restart
+sleep 3
 /etc/init.d/mesh restart
