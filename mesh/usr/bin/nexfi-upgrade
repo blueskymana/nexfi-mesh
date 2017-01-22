@@ -1,0 +1,7 @@
+#!/bin/sh
+
+opkg update
+opkg upgrade nexfi-mesh 
+
+
+

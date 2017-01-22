@@ -1,0 +1,12 @@
+#!/bin/sh
+
+firmware=lede-ar71xx-generic-e600g-v2-16M-squashfs-sysupgrade.bin
+
+wget -c -P /tmp http://download.nexfi.cn:8000/lede/bin/$firmware
+if [ -f "/tmp/$firmware" ];
+then
+    sysupgrade -n /tmp/$firmware
+fi
+
+
+

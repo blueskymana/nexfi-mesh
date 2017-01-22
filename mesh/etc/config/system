@@ -1,6 +1,6 @@
 
 config system
-	option hostname '解铃'
+	option hostname 'Nex-Fi'
 	option timezone 'UTC'
 	option ttylogin '0'
 	option log_size '64'
