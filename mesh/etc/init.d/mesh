@@ -23,6 +23,7 @@ start_service() {
     $MP add $mesh_iface $wlan $ssid $channel
     $BRCTL addif $bridge $mesh_iface
     $IFCONFIG $ifname $ipaddr netmask $netmask
+    ebtables.sh
 }
 
 reload_service() {
