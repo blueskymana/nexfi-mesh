@@ -68,6 +68,6 @@ config wifi-iface
 
 # lan interface
 config lan-iface
-    option    ipaddr    '192.168.100.1'
+    option    ipaddr    '173.173.173.1'
     option    ifname    'br-lan:slave'
     option    netmask   '255.255.255.0'
