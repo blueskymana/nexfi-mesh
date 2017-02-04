@@ -36,15 +36,29 @@ config mesh-iface
     option    channel    '44'
     option    mesh_iface 'mesh'
     option    bridge     'br-lan'
-    option    wlan       'wlan1'
+    option    wlan       'wlan0'
 
 # wifi device 0
 config wifi-device 'radio0'
+    option    hwmode    '11a'
+    option    channel   '44'  
+    option    disabled  '0'
+
+# wifi interface 0
+config wifi-iface
+    option    network   'lan'
+    option    ssid      'nexfi-mesh'
+    option    mode      'mesh'
+    option    encryption 'psk-mixed'
+    option    key       '0A5168DE'
+
+# wifi device 1
+config wifi-device 'radio1'
     option    hwmode    '11ng'
     option    channel   '11'  
     option    disabled  '0'
 
-# wifi interface 0
+# wifi interface 1
 config wifi-iface
     option    network   'lan'
     option    ssid      'nexfi-ap'
@@ -52,19 +66,6 @@ config wifi-iface
     option    encryption 'psk-mixed'
     option    key       '12345678'
 
-# wifi device 1
-config wifi-device 'radio1'
-    option    hwmode    '11a'
-    option    channel   '44'  
-    option    disabled  '0'
-
-# wifi interface 1
-config wifi-iface
-    option    network   'lan'
-    option    ssid      'nexfi-mesh'
-    option    mode      'mesh'
-    option    encryption 'psk-mixed'
-    option    key       '0A5168DE'
 
 # lan interface
 config lan-iface
