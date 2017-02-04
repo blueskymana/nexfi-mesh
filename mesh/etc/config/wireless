@@ -17,7 +17,7 @@ config wifi-iface 'default_radio1'
 config wifi-device 'radio0'
 	option type 'mac80211'
 	option channel '36'
-	option hwmode '11ac'
+	option hwmode '11a'
 	option path 'pci0000:00/0000:00:00.0'
 	option htmode 'HT20'
 
