@@ -20,8 +20,19 @@ IFCONFIG=/sbin/ifconfig
 
 
 start_service() {
-    $MP add $mesh_iface $wlan $ssid $channel
-    $BRCTL addif $bridge $mesh_iface
+
+# mesh protocol configuration.
+    #$MP add $mesh_iface $wlan $ssid $channel
+    #$BRCTL addif $bridge $mesh_iface
+
+# netpool protocol configuration.
+BSSID
+FREQ
+SSID
+
+
+
+# management port configuration.
     $IFCONFIG $ifname $ipaddr netmask $netmask
     ebtables.sh
 }
