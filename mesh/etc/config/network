@@ -28,3 +28,9 @@ config switch
 	option reset '1'
 	option enable_vlan '1'
 
+# netpool protocol
+config interface 'mesh'
+    option mesh 'bat0'
+    option mtu '1532'
+    option proto 'batadv'
+    option network 'lan'
