@@ -33,7 +33,7 @@ config core
 # mesh
 config mesh-iface
     option    ssid       'nexfi-mesh'
-    option    channel    '36'
+    option    channel    '44'
     option    mesh_iface 'mesh'
     option    bridge     'br-lan'
     option    wlan       'wlan0'
@@ -41,7 +41,7 @@ config mesh-iface
 # wifi device 0
 config wifi-device 'radio0'
     option    hwmode    '11ac'
-    option    channel   '36'  
+    option    channel   '44'  
     option    disabled  '0'
 
 # wifi interface 0
