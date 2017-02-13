@@ -44,14 +44,20 @@ config wifi-device 'radio0'
     option    channel   '44'  
     option    disabled  '0'
 
-# wifi interface 0
-config wifi-iface
-    option    network   'lan'
-    option    ssid      'nexfi-mesh'
-    option    mode      'mesh'
-    option    encryption 'psk-mixed'
-    option    key       '0A5168DE'
+# wifi interface 0 with mesh protocol
+#config wifi-iface
+#    option    network   'lan'
+#    option    ssid      'nexfi-mesh'
+#    option    mode      'mesh'
+#    option    encryption 'psk-mixed'
+#    option    key       '0A5168DE'
 
+# wifi interface 0 netpool protocol
+config wifi-iface
+    option    ssid      'nexfi-ad'
+    option    mode      'adhoc'
+    option    encryption 'none'
+    
 # wifi device 1
 config wifi-device 'radio1'
     option    hwmode    '11ng'

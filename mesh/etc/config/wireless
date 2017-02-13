@@ -21,11 +21,18 @@ config wifi-device 'radio0'
 	option path 'pci0000:00/0000:00:00.0'
 	option htmode 'VHT80'
 
+# mesh protocol
+#config wifi-iface 'default_radio0'
+#	option device 'radio0'
+#	option network 'lan'
+#	option mode 'mesh'
+#	option ssid 'nexfi-mesh'
+#	option encryption 'psk-mixed'
+#	option key '0A5168DE'
+
+# netpool protocol
 config wifi-iface 'default_radio0'
 	option device 'radio0'
-	option network 'lan'
-	option mode 'mesh'
-	option ssid 'nexfi-mesh'
-	option encryption 'psk-mixed'
-	option key '0A5168DE'
-
+	option mode 'adhoc'
+	option ssid 'nexfi-ad'
+	option encryption 'none'
