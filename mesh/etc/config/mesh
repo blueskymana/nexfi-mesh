@@ -1,4 +1,6 @@
+##################################################    
 #Frequencies:
+#
 #           * 2412 MHz [1] (18.0 dBm)
 #           * 2417 MHz [2] (18.0 dBm)
 #           * 2422 MHz [3] (18.0 dBm)
@@ -15,8 +17,7 @@
 #           * 2484 MHz [14] (disabled)
 #
 
-# backup directory
-
+##################################################    
 
 # ucitrack
 config network
@@ -30,6 +31,14 @@ config core
     option lang 'zh_cn'
     option mediaurlbase '/luci-static/material'
 
+# lan interface
+config lan-iface
+    option    ipaddr    '173.173.173.1'
+    option    ifname    'br-lan:slave'
+    option    netmask   '255.255.255.0'
+    
+##################################################    
+#
 # mesh
 config mesh-iface
     option    ssid       'nexfi-mesh'
@@ -73,8 +82,3 @@ config wifi-iface
     option    key       '12345678'
 
 
-# lan interface
-config lan-iface
-    option    ipaddr    '173.173.173.1'
-    option    ifname    'br-lan:slave'
-    option    netmask   '255.255.255.0'
