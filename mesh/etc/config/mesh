@@ -43,7 +43,7 @@ config lan-iface
 config mesh-iface
     option    ssid       'nexfi-mesh'
     option    channel    '44'
-    option    mesh_iface 'mesh'
+    option    mesh_iface 'bat0'
     option    bridge     'br-lan'
     option    wlan       'wlan0'
 

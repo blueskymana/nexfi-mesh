@@ -33,7 +33,8 @@ config interface 'batnet'
 	option mtu '1532'
 	option proto 'batadv'
 
-config interface 'batt'
+config interface 'bat'
 	option ifname 'bat0'
 	option proto 'static'
 	option netmask 255.255.255.0
+	option network 'lan'
