@@ -1,84 +1,64 @@
-##################################################    
-#Frequencies:
-#
-#           * 2412 MHz [1] (18.0 dBm)
-#           * 2417 MHz [2] (18.0 dBm)
-#           * 2422 MHz [3] (18.0 dBm)
-#           * 2427 MHz [4] (18.0 dBm)
-#           * 2432 MHz [5] (18.0 dBm)
-#           * 2437 MHz [6] (18.0 dBm)
-#           * 2442 MHz [7] (18.0 dBm)
-#           * 2447 MHz [8] (18.0 dBm)
-#           * 2452 MHz [9] (18.0 dBm)
-#           * 2457 MHz [10] (18.0 dBm)
-#           * 2462 MHz [11] (18.0 dBm)
-#           * 2467 MHz [12] (disabled)
-#           * 2472 MHz [13] (disabled)
-#           * 2484 MHz [14] (disabled)
-#
+#!/bin/sh /etc/rc.common
 
-##################################################    
+START=99
+STOP=20
 
-# ucitrack
-config network
-    option affects 'mesh'
+USE_PROCD=1
 
-config mesh 
-    option init 'mesh'
+channel=$(uci get mesh.@mesh-iface[0].channel)
+mesh_iface=$(uci get mesh.@mesh-iface[0].mesh_iface)
+wlan=$(uci get mesh.@mesh-iface[0].wlan)
+ssid=$(uci get mesh.@mesh-iface[0].ssid)
+bridge=$(uci get mesh.@mesh-iface[0].bridge)
+ipaddr=$(uci get mesh.@lan-iface[0].ipaddr)
+ifname=$(uci get mesh.@lan-iface[0].ifname)
+netmask=$(uci get mesh.@lan-iface[0].netmask)
 
-# luci (theme & language)
-config core 
-    option lang 'zh_cn'
-    option mediaurlbase '/luci-static/material'
-
-# lan interface
-config lan-iface
-    option    ipaddr    '173.173.173.1'
-    option    ifname    'br-lan:slave'
-    option    netmask   '255.255.255.0'
-    
-##################################################    
-#
-# mesh
-config mesh-iface
-    option    ssid       'nexfi-mesh'
-    option    channel    '44'
-    option    mesh_iface 'bat0'
-    option    bridge     'br-lan'
-    option    wlan       'wlan0'
-
-# wifi device 0
-config wifi-device 'radio0'
-    option    hwmode    '11ac'
-    option    channel   '44'  
-    option    disabled  '0'
-
-# wifi interface 0 with mesh protocol
-#config wifi-iface
-#    option    network   'lan'
-#    option    ssid      'nexfi-mesh'
-#    option    mode      'mesh'
-#    option    encryption 'psk-mixed'
-#    option    key       '0A5168DE'
-
-# wifi interface 0 netpool protocol
-config wifi-iface
-    option    ssid      'nexfi-ad'
-    option    mode      'adhoc'
-    option    encryption 'none'
-    
-# wifi device 1
-config wifi-device 'radio1'
-    option    hwmode    '11ng'
-    option    channel   '11'  
-    option    disabled  '0'
-
-# wifi interface 1
-config wifi-iface
-    option    network   'lan'
-    option    ssid      'nexfi-ap'
-    option    mode      'ap'
-    option    encryption 'psk-mixed'
-    option    key       '12345678'
+MP=/usr/bin/mp
+BRCTL=/usr/sbin/brctl
+IFCONFIG=/sbin/ifconfig
+SLEEP=/bin/sleep
 
 
+start_service() {
+
+# mesh protocol configuration.
+    #$MP add $mesh_iface $wlan $ssid $channel
+    #$BRCTL addif $bridge $mesh_iface
+
+# netpool protocol configuration.
+    $SLEEP 3
+    $BRCTL addif $bridge $mesh_iface
+
+# management port configuration.
+    $IFCONFIG $ifname $ipaddr netmask $netmask
+    ebtables.sh
+}
+
+reload_service() {
+    restart
+}
+
+stop_service() {
+    #$MP del $mesh_iface
+    logger -s "stop_service"
+}
+
+service_running() {
+    logger -s "service_running"
+}
+
+service_triggers()
+{
+    logger -s "service_triggers"
+}
+
+restart() {
+    stop
+    sleep 1
+    start
+}
+
+shutdown() {
+    logger -s "shutdown"
+}
