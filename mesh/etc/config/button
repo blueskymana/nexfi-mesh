@@ -1,6 +1,41 @@
 config button
     option button 'reset'
     option action 'released'
-    option handler 'mkdir -p /root/test'
+    option handler 'reboot'
     option min 0
-    option max 2
+    option max 1
+    
+config button
+    option button 'reset'
+    option action 'released'
+    option handler '"flock -xn /tmp/nexfi-upgrade.lock -c \"sync.sh\""
+    option min 1
+    option max 3
+
+config button
+    option button 'reset'
+    option action 'released'
+    option handler '"flock -xn /tmp/nexfi-upgrade.lock -c \"syncr.sh\""
+    option min 3
+    option max 5
+
+config button
+    option button 'reset'
+    option action 'released'
+    option handler 'appupgd'
+    option min 5
+    option max 7
+
+config button
+    option button 'reset'
+    option action 'released'
+    option handler 'osupgd'
+    option min 7
+    option max 9
+
+config button
+    option button 'reset'
+    option action 'released'
+    option handler 'rm -rf /overlay/* && reboot'
+    option min 9
+    option max 11
