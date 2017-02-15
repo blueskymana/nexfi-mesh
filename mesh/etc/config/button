@@ -1,0 +1,6 @@
+config button
+    option button 'reset'
+    option action 'released'
+    option handler 'mkdir -p /root/test'
+    option min 0
+    option max 2
