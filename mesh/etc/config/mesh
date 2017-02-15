@@ -33,7 +33,7 @@ config core
 
 # lan interface
 config lan-iface
-    option    ipaddr    '173.173.173.1'
+    option    ipaddr    '172.16.16.16'
     option    ifname    'br-lan:slave'
     option    netmask   '255.255.255.0'
     
