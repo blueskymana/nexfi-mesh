@@ -14,6 +14,7 @@ config interface 'lan'
 	option proto 'static'
 	option netmask '255.255.255.0'
 	option ip6assign '60'
+    option dns '202.96.209.133'
 
 config interface 'wan'
 	option ifname 'eth1'
