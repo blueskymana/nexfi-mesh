@@ -1,7 +1,7 @@
 
 config core 'main'
 	option resourcebase '/luci-static/resources'
-	option mediaurlbase '/luci-static/material'
+	option mediaurlbase '/luci-static/bootstrap'
 	option lang 'zh_cn'
 
 config extern 'flash_keep'
