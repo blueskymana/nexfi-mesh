@@ -1,7 +1,7 @@
 #!/bin/sh
 
 get_option() {
-    echo $(echo $1 | awk -F ':' -v option="$2" '{ for (i=1; i<=NF; i++) { if($i==option) print $(i+1) } }')
+    echo $(echo $1 | awk -F '|' -v option="$2" '{ for (i=1; i<=NF; i++) { if($i==option) print $(i+1) } }')
 }
 
 channel=$(uci get mesh.@mesh-iface[0].channel)
@@ -17,26 +17,27 @@ IFCONFIG=/sbin/ifconfig
 
 /etc/init.d/mesh stop
 uci set wireless.@wifi-iface[1].ssid=$ssid
-uci set wireless.@wifi-iface[1].mode=$bssid
+uci set wireless.@wifi-iface[1].bssid=$bssid
 uci commit wireless
 /etc/init.d/network reload
 
 sleep 3
-$IFCONFIG $WAN 172.16.73.2 netmask 255.255.255.0
+$IFCONFIG $wlan 172.16.73.2 netmask 255.255.255.0
 netconfig=$(udpecho -s)
+echo $netconfig > /root/sync.log
 
 ssid=$(get_option $netconfig ssid)
 key=$(get_option $netconfig key)
 encryption=$(get_option $netconfig encryption)
-ssid2=$(get_option $netconfig ssid2)
-bssid=$(get_option $netconfig bssid)
+ssid_ad=$(get_option $netconfig ssid-ad)
+bssid_ad=$(get_option $netconfig bssid-ad)
 
 uci set wireless.@wifi-iface[0].ssid=$ssid
 uci set wireless.@wifi-iface[0].key=$key
 uci set wireless.@wifi-iface[0].encryption=$encryption
 
-uci set wireless.@wifi-iface[1].ssid=$ssid2
-uci set wireless.@wifi-iface[1].bssid=$bssid
+uci set wireless.@wifi-iface[1].ssid=$ssid_ad
+uci set wireless.@wifi-iface[1].bssid=$bssid_ad
 uci commit wireless
 
 /etc/init.d/network restart

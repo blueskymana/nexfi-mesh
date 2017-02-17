@@ -40,6 +40,7 @@ reload_service() {
 }
 
 stop_service() {
+    $BRCTL delif $bridge $mesh_iface
     #$MP del $mesh_iface
     logger -s "stop_service"
 }
