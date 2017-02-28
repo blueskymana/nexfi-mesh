@@ -10,6 +10,7 @@ mesh_iface=$(uci get mesh.@mesh-iface[0].mesh_iface)
 wlan=$(uci get mesh.@mesh-iface[0].wlan)
 ssid=$(uci get mesh.@mesh-iface[0].ssid)
 bridge=$(uci get mesh.@mesh-iface[0].bridge)
+htmode=$(uci get mesh.@mesh-iface[0].htmode)
 ipaddr=$(uci get mesh.@lan-iface[0].ipaddr)
 ifname=$(uci get mesh.@lan-iface[0].ifname)
 netmask=$(uci get mesh.@lan-iface[0].netmask)
@@ -23,12 +24,11 @@ SLEEP=/bin/sleep
 start_service() {
 
 # mesh protocol configuration.
-    #$MP add $mesh_iface $wlan $ssid $channel
-    #$BRCTL addif $bridge $mesh_iface
+    $MP $wlan $channel $htmode $ssid
 
 # netpool protocol configuration.
-    $SLEEP 3
-    $BRCTL addif $bridge $mesh_iface
+    #$SLEEP 3
+    #$BRCTL addif $bridge $mesh_iface
 
 # management port configuration.
     $IFCONFIG $ifname $ipaddr netmask $netmask
@@ -40,7 +40,7 @@ reload_service() {
 }
 
 stop_service() {
-    $BRCTL delif $bridge $mesh_iface
+    #$BRCTL delif $bridge $mesh_iface
     #$MP del $mesh_iface
     logger -s "stop_service"
 }

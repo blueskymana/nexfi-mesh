@@ -33,7 +33,7 @@ config core
 
 # lan interface
 config lan-iface
-    option    ipaddr    '172.16.16.16'
+    option    ipaddr    '192.168.8.8'
     option    ifname    'br-lan:slave'
     option    netmask   '255.255.255.0'
     
@@ -41,12 +41,13 @@ config lan-iface
 #
 # mesh
 config mesh-iface
-    option    ssid       'nexfi-sync'
+    option    ssid       'nexfi-mesh'
     option    channel    '44'
     option    mesh_iface 'bat0'
     option    bridge     'br-lan'
-    option    wlan       'wlan1'
+    option    wlan       'wlan0'
     option    bssid      '00:03:AA:6E:8C:9D'
+    option    htmode     'HT40+'
 
 # wifi device 0
 config wifi-device 'radio0'
