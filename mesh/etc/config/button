@@ -8,14 +8,14 @@ config button
 config button
     option button 'reset'
     option action 'released'
-    option handler '"flock -xn /tmp/nexfi-upgrade.lock -c \"sync.sh\""
+    option handler '"flock -xn /tmp/nexfi-upgrade.lock -c \"sync.sh\"'
     option min 1
     option max 3
 
 config button
     option button 'reset'
     option action 'released'
-    option handler '"flock -xn /tmp/nexfi-upgrade.lock -c \"syncr.sh\""
+    option handler '"flock -xn /tmp/nexfi-upgrade.lock -c \"syncr.sh\"'
     option min 3
     option max 5
 
