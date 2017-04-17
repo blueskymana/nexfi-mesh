@@ -47,7 +47,7 @@ config mesh-iface
     option    bridge     'br-lan'
     option    wlan       'wlan0'
     option    bssid      '00:03:AA:6E:8C:9D'
-    option    htmode     'HT40+'
+    option    htmode     'HT40'
 
 # wifi device 0
 config wifi-device 'radio0'
