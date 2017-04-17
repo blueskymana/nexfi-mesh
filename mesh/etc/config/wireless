@@ -31,6 +31,6 @@ config wifi-iface 'default_radio1'
 	option network 'lan'
 	option mode 'ap'
 	option ssid 'nexfi-ap'
-	option encryption 'wpa-psk2'
+	option encryption 'psk-mixed'
     option key '12345678'
 
