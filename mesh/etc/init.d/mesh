@@ -24,7 +24,7 @@ SLEEP=/bin/sleep
 start_service() {
 
 # mesh protocol configuration.
-    $MP $wlan $channel $htmode $ssid
+    #$MP $wlan $channel $htmode $ssid
 
 # netpool protocol configuration.
     #$SLEEP 3

@@ -9,7 +9,7 @@ config globals 'globals'
 
 config interface 'lan'
         option type 'bridge'
-        option ifname 'eth0 eth1 bat0'
+        option ifname 'eth0 bat0'
         option proto 'static'
         option netmask '255.255.255.0'
         option ip6assign '60'
