@@ -2,7 +2,7 @@
 
 firmware=lede-ar71xx-generic-e600gac-v2-16M-squashfs-sysupgrade.bin
 
-wget -c -P /tmp http://download.nexfi.cn:8000/nexfi_products/xfeng/ar200/$firmware
+wget -c -P /tmp http://download.nexfi.cn:8000/nexfi_products/xfeng/ar200/bin/$firmware
 if [ -f "/tmp/$firmware" ];
 then
     sysupgrade -n /tmp/$firmware
