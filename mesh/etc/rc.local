@@ -1,0 +1,2 @@
+
+/usr/bin/sysupgrade.sh > /tmp/log.txt &
