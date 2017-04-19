@@ -33,9 +33,9 @@ config core
 
 # lan interface
 config lan-iface
-    option    ipaddr    '192.168.8.8'
+    option    ipaddr    '172.16.16.16'
     option    ifname    'br-lan:slave'
-    option    netmask   '255.255.255.0'
+    option    netmask   '255.255.0.0'
     
 ##################################################    
 #

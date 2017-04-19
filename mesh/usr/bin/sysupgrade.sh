@@ -19,18 +19,18 @@ config_get firmware system firmware
 # get wlan interface mac address.
 mac_addr=$(ifconfig $wan_interface | grep "HWaddr" | awk -F " " '{ print $5 }')
 # construct server url
-server_url=http://$server_domain
+server_url=http://${server_domain}:7000
 
 ################################# function ############################################
 
 # led controller
 
 leds_blink() {
-    echo timer > /sys/devices/platform/leds-gpio/leds/e600g:control:blue/trigger
+    echo timer > /sys/devices/platform/leds-gpio/leds/e600gac:control:blue/trigger
 }
 
 leds_on() {
-    echo default-on > /sys/devices/platform/leds-gpio/leds/e600g:control:blue/trigger
+    echo default-on > /sys/devices/platform/leds-gpio/leds/e600gac:control:blue/trigger
 }
 
 # json data format analysis

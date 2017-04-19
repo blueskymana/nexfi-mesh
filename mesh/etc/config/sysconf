@@ -1,0 +1,8 @@
+config system 'system'
+    option soft_version      "1.0.0"
+    option product_id        "ar200"
+    option server_domain     "update.nexfi.cn"
+    option device_id         "0"
+    option firmware          "lede-nexfi"
+    option wan_interface     "eth1"
+    option wlan_interface    "wlan0"
