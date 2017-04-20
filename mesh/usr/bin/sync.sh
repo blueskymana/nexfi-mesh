@@ -7,45 +7,80 @@ ssid=$(uci get mesh.@mesh-iface[0].ssid)
 bridge=$(uci get mesh.@mesh-iface[0].bridge)
 bssid=$(uci get mesh.@mesh-iface[0].bssid)
 
-MP=/usr/bin/mp
+btn_pipe=/tmp/btn_pipe
+btn_msg=relased
+btn_rpipe=/tmp/btn_rpipe
+
 BRCTL=/usr/sbin/brctl
 IFCONFIG=/sbin/ifconfig
 
-#/etc/init.d/mesh stop
-orig_ssid=$(uci get wireless.@wifi-iface[1].ssid)
-orig_bssid=$(uci get wireless.@wifi-iface[1].bssid)
+leds_sync() {
+    echo timer > /sys/devices/platform/leds-gpio/leds/e600gac:control:green/trigger
+}
 
-uci set wireless.@wifi-iface[1].ssid=$ssid
-uci set wireless.@wifi-iface[1].bssid=$bssid
+leds_sync_off() {
+    echo none > /sys/devices/platform/leds-gpio/leds/e600gac:control:green/trigger
+}
+
+
+if [ -p $btn_pipe ];
+then
+    echo $btn_msg > $btn_pipe
+    exit
+fi
+
+
+#/etc/init.d/mesh stop
+orig_ssid=$(uci get wireless.@wifi-iface[0].ssid)
+orig_bssid=$(uci get wireless.@wifi-iface[0].bssid)
+
+uci set wireless.@wifi-iface[0].ssid=$ssid
+uci set wireless.@wifi-iface[0].bssid=$bssid
 uci commit wireless
-/etc/init.d/network reload
+
+leds_sync
+
+msg=none
+[ -p $btn_pipe ] && exit
+[ -p $btn_rpipe ] && exit
+mkfifo $btn_pipe
+read -t 1 msg <> $btn_pipe
+
+#/etc/init.d/network reload
+wifi
 sleep 3
-$IFCONFIG $wlan 172.16.73.1 netmask 255.255.255.0
+$IFCONFIG $wlan 172.16.73.1 netmask 255.255.0.0
 
 # sync data
-ssid=$(uci get wireless.@wifi-iface[0].ssid)
-key=$(uci get wireless.@wifi-iface[0].key)
-encryption=$(uci get wireless.@wifi-iface[0].encryption)
+ssid=$(uci get wireless.@wifi-iface[1].ssid)
+key=$(uci get wireless.@wifi-iface[1].key)
+encryption=$(uci get wireless.@wifi-iface[1].encryption)
 
 syncdata="ssid|${ssid}|key|${key}|encryption|${encryption}|ssid-ad|${orig_ssid}|bssid-ad|${orig_bssid}"
 
-bcast=172.16.73.255
+bcast=172.16.255.255
 # transfer data
 
-for i in {1 2 3 4 5 6 7 8 9 10}
+while [ 1 ];
 do
     udpecho $bcast $syncdata 
     echo $syncdata
-    sleep 1
+    read -t 1 msg <> $btn_pipe
+    if [ $btn_msg = $msg ];
+    then
+        break
+    fi
+    echo $msg
 done
 
-uci set wireless.@wifi-iface[1].ssid=$orig_ssid
-uci set wireless.@wifi-iface[1].bssid=$orig_bssid
+leds_sync_off
+
+uci set wireless.@wifi-iface[0].ssid=$orig_ssid
+uci set wireless.@wifi-iface[0].bssid=$orig_bssid
 uci commit wireless
 
-/etc/init.d/network reload
+/etc/init.d/network restart
 sleep 3
 /etc/init.d/mesh restart
 
-#$MP add $mesh_iface $wlan nexfi-sync $channel
-#$IFCONFIG $mesh_iface 172.16.73.1 netmask 255.255.255.0
+rm $btn_pipe

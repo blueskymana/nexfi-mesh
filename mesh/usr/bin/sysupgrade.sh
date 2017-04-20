@@ -74,9 +74,9 @@ done
 # get firmware version
 json=$(curl $server_url/\?product_id\=$product_id\&macaddr\=$mac_addr\&devid\=$device_id\&soft_ver\=$soft_version)
 
-if [ -z "$json" ];
+if [ -z "$json" || $json -eq 2 ];
 then
-    echo "web server $server_url no response."
+    echo "web server $server_url no response or have no device id."
     exit
 fi
 
