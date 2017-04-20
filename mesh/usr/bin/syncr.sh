@@ -5,11 +5,11 @@ get_option() {
 }
 
 leds_sync() {
-    echo timer > /sys/devices/platform/leds-gpio/leds/e600gac:control:blue/trigger
+    echo timer > /sys/devices/platform/leds-gpio/leds/e600gac:control:red/trigger
 }
 
 leds_sync_off() {
-    echo none > /sys/devices/platform/leds-gpio/leds/e600gac:control:blue/trigger
+    echo none > /sys/devices/platform/leds-gpio/leds/e600gac:control:red/trigger
 }
 
 channel=$(uci get mesh.@mesh-iface[0].channel)
@@ -29,17 +29,26 @@ IFCONFIG=/sbin/ifconfig
 [ -p $btn_pipe ] && exit
 [ -p $btn_rpipe ] && exit
 
+leds_sync
 mkdir $btn_rpipe
 
-/etc/init.d/mesh stop
+ifconfig $mesh_iface down                                                          
+brctl delif $bridge $mesh_iface
+
+orig_network=$(uci get wireless.@wifi-iface[0].network)
+
 uci set wireless.@wifi-iface[0].ssid=$ssid
 uci set wireless.@wifi-iface[0].bssid=$bssid
+uci set wireless.@wifi-iface[0].network=none
 uci commit wireless
-/etc/init.d/network reload
+/etc/init.d/network restart
 
-sleep 3
-$IFCONFIG $wlan 172.16.73.2 netmask 255.255.0.0
+sleep 6
+$IFCONFIG $wlan 172.16.16.2 netmask 255.255.0.0
 netconfig=$(udpecho -s)
+
+leds_sync_off
+
 echo $netconfig > /root/sync.log
 
 ssid=$(get_option $netconfig ssid)
@@ -54,6 +63,7 @@ uci set wireless.@wifi-iface[1].encryption=$encryption
 
 uci set wireless.@wifi-iface[0].ssid=$ssid_ad
 uci set wireless.@wifi-iface[0].bssid=$bssid_ad
+uci set wireless.@wifi-iface[0].network=$orig_network
 uci commit wireless
 
 /etc/init.d/network restart

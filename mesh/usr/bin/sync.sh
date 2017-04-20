@@ -29,27 +29,30 @@ then
     exit
 fi
 
-
-#/etc/init.d/mesh stop
-orig_ssid=$(uci get wireless.@wifi-iface[0].ssid)
-orig_bssid=$(uci get wireless.@wifi-iface[0].bssid)
-
-uci set wireless.@wifi-iface[0].ssid=$ssid
-uci set wireless.@wifi-iface[0].bssid=$bssid
-uci commit wireless
+[ -p $btn_pipe ] && exit
+[ -p $btn_rpipe ] && exit
 
 leds_sync
 
+orig_ssid=$(uci get wireless.@wifi-iface[0].ssid)
+orig_bssid=$(uci get wireless.@wifi-iface[0].bssid)
+orig_network=$(uci get wireless.@wifi-iface[0].network)
+
+uci set wireless.@wifi-iface[0].ssid=$ssid
+uci set wireless.@wifi-iface[0].bssid=$bssid
+uci set wireless.@wifi-iface[0].network=none
+uci commit wireless
+
+ifconfig $mesh_iface down
+brctl delif $bridge $mesh_iface
+
 msg=none
-[ -p $btn_pipe ] && exit
-[ -p $btn_rpipe ] && exit
 mkfifo $btn_pipe
 read -t 1 msg <> $btn_pipe
 
-#/etc/init.d/network reload
-wifi
-sleep 3
-$IFCONFIG $wlan 172.16.73.1 netmask 255.255.0.0
+/etc/init.d/network restart
+sleep 5
+$IFCONFIG $wlan 172.16.16.1 netmask 255.255.0.0
 
 # sync data
 ssid=$(uci get wireless.@wifi-iface[1].ssid)
@@ -63,20 +66,21 @@ bcast=172.16.255.255
 
 while [ 1 ];
 do
-    udpecho $bcast $syncdata 
-    echo $syncdata
+    #udpecho $bcast $syncdata 
+    #echo $syncdata
     read -t 1 msg <> $btn_pipe
     if [ $btn_msg = $msg ];
     then
         break
     fi
-    echo $msg
+    #echo $msg
 done
 
 leds_sync_off
 
 uci set wireless.@wifi-iface[0].ssid=$orig_ssid
 uci set wireless.@wifi-iface[0].bssid=$orig_bssid
+uci set wireless.@wifi-iface[0].network=$orig_network
 uci commit wireless
 
 /etc/init.d/network restart

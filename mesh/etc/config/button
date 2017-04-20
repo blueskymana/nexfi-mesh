@@ -15,14 +15,14 @@ config button
 config button
     option button 'reset'
     option action 'released'
-    option handler 'syncr.sh'
+    option handler '/usr/bin/syncr.sh &'
     option min 0
     option max 1
 
 config button
     option button 'reset'
     option action 'released'
-    option handler 'sync.sh'
+    option handler '/usr/bin/sync.sh &'
     option min 2
     option max 5
 
