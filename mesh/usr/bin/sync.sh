@@ -34,9 +34,11 @@ fi
 
 leds_sync
 
-orig_ssid=$(uci get wireless.@wifi-iface[0].ssid)
-orig_bssid=$(uci get wireless.@wifi-iface[0].bssid)
-orig_network=$(uci get wireless.@wifi-iface[0].network)
+#bridge_ssid=$(uci get wireless.@wifi-iface[0].ssid)
+#bridge_bssid=$(uci get wireless.@wifi-iface[0].bssid)
+bridge_ssid=$(head -n 10 /dev/urandom | md5sum | head -c 8)
+bridge_bssid=00$(dd bs=1 count=5 if=/dev/random 2>/dev/null |hexdump -v -e '/1 ":%02X"')
+bridge_network=$(uci get wireless.@wifi-iface[0].network)
 
 uci set wireless.@wifi-iface[0].ssid=$ssid
 uci set wireless.@wifi-iface[0].bssid=$bssid
@@ -59,15 +61,15 @@ ssid=$(uci get wireless.@wifi-iface[1].ssid)
 key=$(uci get wireless.@wifi-iface[1].key)
 encryption=$(uci get wireless.@wifi-iface[1].encryption)
 
-syncdata="ssid|${ssid}|key|${key}|encryption|${encryption}|ssid-ad|${orig_ssid}|bssid-ad|${orig_bssid}"
+syncdata="ssid|${ssid}|key|${key}|encryption|${encryption}|ssid-ad|${bridge_ssid}|bssid-ad|${bridge_bssid}"
 
 bcast=172.16.255.255
 # transfer data
 
 while [ 1 ];
 do
-    #udpecho $bcast $syncdata 
-    #echo $syncdata
+    udpecho $bcast $syncdata 
+    echo $syncdata > /tmp/sync.log
     read -t 1 msg <> $btn_pipe
     if [ $btn_msg = $msg ];
     then
@@ -78,9 +80,9 @@ done
 
 leds_sync_off
 
-uci set wireless.@wifi-iface[0].ssid=$orig_ssid
-uci set wireless.@wifi-iface[0].bssid=$orig_bssid
-uci set wireless.@wifi-iface[0].network=$orig_network
+uci set wireless.@wifi-iface[0].ssid=$bridge_ssid
+uci set wireless.@wifi-iface[0].bssid=$bridge_bssid
+uci set wireless.@wifi-iface[0].network=$bridge_network
 uci commit wireless
 
 /etc/init.d/network restart
