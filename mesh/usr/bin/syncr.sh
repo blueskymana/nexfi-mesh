@@ -49,7 +49,14 @@ netconfig=$(udpecho -s)
 
 leds_sync_off
 
-echo $netconfig > /root/sync.log
+echo $netconfig >> /root/sync.log
+
+if [ -z $netconfig ];
+then
+    rm -f $btn_rpipe
+    echo timeout >> /root/sync.log
+    exit
+fi
 
 ssid=$(get_option $netconfig ssid)
 key=$(get_option $netconfig key)
