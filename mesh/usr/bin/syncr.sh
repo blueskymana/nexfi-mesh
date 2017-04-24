@@ -74,7 +74,6 @@ uci set wireless.@wifi-iface[0].network=$orig_network
 uci commit wireless
 
 /etc/init.d/network restart
-sleep 3
 /etc/init.d/mesh restart
 
 rm -f $btn_rpipe

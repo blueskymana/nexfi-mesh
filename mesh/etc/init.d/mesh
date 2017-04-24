@@ -31,6 +31,7 @@ start_service() {
     #$BRCTL addif $bridge $mesh_iface
 
 # management port configuration.
+    $SLEEP 10
     batctl dat 0
     $IFCONFIG $ifname $ipaddr netmask $netmask
     ebtables.sh
