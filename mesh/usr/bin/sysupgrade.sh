@@ -19,7 +19,7 @@ config_get firmware system firmware
 # get wlan interface mac address.
 mac_addr=$(ifconfig $wan_interface | grep "HWaddr" | awk -F " " '{ print $5 }')
 # construct server url
-server_url=http://${server_domain}:7000
+server_url=http://${server_domain}:80
 
 ################################# function ############################################
 
@@ -51,13 +51,10 @@ ping_cmd() {
     fi
 }
 
-# configuration file version number compare function.
-version_gt() { test "$(echo "$@" | tr -s " " "\n" | sort -n | head -n 1)" != "$1"; }
-
-
 ################################# process ############################################
 
 #### ping web server until receiving feedback
+/etc/init.d/dnsmasq stop
 
 for i in `seq 60`
 do
@@ -68,15 +65,22 @@ do
         echo $ret
         break
     fi
-    [ $i -eq 60 ] && exit
+    if [ $i -eq 60 ];
+    then
+    	/etc/init.d/dnsmasq start
+        exit
+    fi
 done
 
 # get firmware version
 json=$(curl $server_url/\?product_id\=$product_id\&macaddr\=$mac_addr\&devid\=$device_id\&soft_ver\=$soft_version)
 
-if [ -z "$json" || $json -eq 2 ];
+echo $json
+
+if [ -z "$json" ] || [ $json -eq 2 ];
 then
     echo "web server $server_url no response or have no device id."
+    /etc/init.d/dnsmasq start
     exit
 fi
 
@@ -84,13 +88,10 @@ fi
 r_soft_version=$(json_parse "$json" "soft_ver")
 r_device_id=$(json_parse "$json" "devid")
 r_md5=$(json_parse "$json" "md5")
-
-echo $json
-echo $r_md5
+r_update_process=$(json_parse "$json" "update_process")
 
 # compare version
-echo $r_soft_version $soft_version
-if version_gt "$r_soft_version" "$soft_version"
+if [ $r_update_process -eq 1 ]
 then
     # check information and download firmware
     os_file=$firmware-$product_id-$r_soft_version.bin
@@ -102,6 +103,7 @@ then
     if [ ! -f /tmp/$os_file ]
     then
         echo "/tmp/$osfile download failed."
+        /etc/init.d/dnsmasq start
         exit
     fi
     echo "download $os_file to /tmp "
@@ -126,7 +128,7 @@ then
         leds_blink
 
         # upgrade system.
-        sysupgrade -c /tmp/$os_file
+        #sysupgrade -c /tmp/$os_file
 
         # echo information.
         echo "starting to upgrate /tmp/$os_file."
@@ -137,4 +139,4 @@ else
     echo "local firmware version greater than or equal to remote firmware version"
 fi
 
-
+/etc/init.d/dnsmasq start
