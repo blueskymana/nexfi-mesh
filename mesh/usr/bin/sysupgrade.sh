@@ -54,7 +54,6 @@ ping_cmd() {
 ################################# process ############################################
 
 #### ping web server until receiving feedback
-/etc/init.d/dnsmasq stop
 
 for i in `seq 60`
 do
@@ -67,7 +66,6 @@ do
     fi
     if [ $i -eq 60 ];
     then
-    	/etc/init.d/dnsmasq start
         exit
     fi
 done
@@ -80,7 +78,6 @@ echo $json
 if [ -z "$json" ] || [ $json -eq 2 ];
 then
     echo "web server $server_url no response or have no device id."
-    /etc/init.d/dnsmasq start
     exit
 fi
 
@@ -103,7 +100,6 @@ then
     if [ ! -f /tmp/$os_file ]
     then
         echo "/tmp/$osfile download failed."
-        /etc/init.d/dnsmasq start
         exit
     fi
     echo "download $os_file to /tmp "
@@ -128,7 +124,7 @@ then
         leds_blink
 
         # upgrade system.
-        #sysupgrade -c /tmp/$os_file
+        sysupgrade -c /tmp/$os_file
 
         # echo information.
         echo "starting to upgrate /tmp/$os_file."
@@ -138,5 +134,3 @@ then
 else
     echo "local firmware version greater than or equal to remote firmware version"
 fi
-
-/etc/init.d/dnsmasq start
