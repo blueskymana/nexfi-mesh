@@ -14,7 +14,7 @@ config wifi-iface 'default_radio0'
 	option mode 'adhoc'
 	option bssid '66:61:00:11:22:44'
 	option ssid 'nexfi-ad'
-	option encryption 'wpa-psk'
+	option encryption 'none'
     option key '496390182735'
 
 config wifi-device 'radio1'
