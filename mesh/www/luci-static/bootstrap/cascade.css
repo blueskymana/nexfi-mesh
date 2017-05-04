@@ -913,7 +913,7 @@ header div > ul .dropdown-menu li a,
 .nav .dropdown-menu li a {
 	/*color: #999;*/
 	color: #FFFFFF;
-	/*text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);*/
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 header div > ul .menu-dropdown li a:hover,
